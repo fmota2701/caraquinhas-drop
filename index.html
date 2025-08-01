@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caraquinhas Drop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Caraquinhas Drop</h1>
+    <div id="login-section">
+      <input type="text" id="nick-input" placeholder="Digite seu nick" />
+      <button onclick="login()">Entrar</button>
+      <p id="login-error" class="error"></p>
+    </div>
+
+    <div id="items-section" style="display:none;">
+      <h2>Itens disponíveis para você:</h2>
+      <ul id="item-list"></ul>
+      <button onclick="logout()">Sair</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

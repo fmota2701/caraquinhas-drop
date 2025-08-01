@@ -1,0 +1,12 @@
+
+{
+  "players": [
+    { "nick": "Zerado", "classe": "Guerreiro", "cp": 5000, "lvl": 50 },
+    { "nick": "Maguinho", "classe": "Mago", "cp": 3200, "lvl": 40 }
+  ],
+  "items": [
+    { "nome": "Espada Flamejante", "cp_min": 4000, "lvl_min": 45 },
+    { "nome": "Cajado Arcano", "cp_min": 3000, "lvl_min": 35 },
+    { "nome": "Armadura Mística", "cp_min": 6000, "lvl_min": 55 }
+  ]
+}
