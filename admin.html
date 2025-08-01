@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Caraquinhas Drop</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Administração</h1>
+    <div id="login-admin">
+      <input type="password" id="admin-pass" placeholder="Digite a senha" />
+      <button onclick="verifyPassword()">Entrar</button>
+      <p id="admin-error" class="error"></p>
+    </div>
+
+    <div id="admin-panel" style="display:none;">
+      <h2>Jogadores</h2>
+      <ul id="player-list"></ul>
+      <h3>Adicionar Jogador</h3>
+      <input id="nick" placeholder="Nick" />
+      <input id="classe" placeholder="Classe" />
+      <input id="cp" placeholder="CP" type="number" />
+      <input id="lvl" placeholder="Nível" type="number" />
+      <button onclick="addPlayer()">Adicionar</button>
+
+      <h2>Itens</h2>
+      <ul id="item-list"></ul>
+      <h3>Adicionar Item</h3>
+      <input id="item-name" placeholder="Nome do Item" />
+      <input id="item-cp" placeholder="CP Mínimo" type="number" />
+      <input id="item-lvl" placeholder="Nível Mínimo" type="number" />
+      <button onclick="addItem()">Adicionar</button>
+
+      <br/><br/>
+      <button onclick="downloadJSON()">Baixar data.json</button>
+    </div>
+  </div>
+
+  <script>
+    let data = {players: [], items: []};
+
+    fetch('data.json')
+      .then(res => res.json())
+      .then(d => {
+        data = d;
+        updateLists();
+      });
+
+    function verifyPassword() {
+      const pass = document.getElementById('admin-pass').value;
+      if (pass === 'f3l1p3') {
+        document.getElementById('login-admin').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+      } else {
+        document.getElementById('admin-error').innerText = 'Senha incorreta';
+      }
+    }
+
+    function updateLists() {
+      const playerList = document.getElementById('player-list');
+      const itemList = document.getElementById('item-list');
+      playerList.innerHTML = '';
+      itemList.innerHTML = '';
+
+      data.players.forEach((p, i) => {
+        const li = document.createElement('li');
+        li.innerText = `${p.nick} (${p.classe}) CP:${p.cp} Nível:${p.lvl}`;
+        const del = document.createElement('button');
+        del.innerText = 'Excluir';
+        del.onclick = () => { data.players.splice(i,1); updateLists(); };
+        li.appendChild(del);
+        playerList.appendChild(li);
+      });
+
+      data.items.forEach((it, i) => {
+        const li = document.createElement('li');
+        li.innerText = `${it.nome} (CP:${it.cp_min}, Nível:${it.lvl_min})`;
+        const del = document.createElement('button');
+        del.innerText = 'Excluir';
+        del.onclick = () => { data.items.splice(i,1); updateLists(); };
+        li.appendChild(del);
+        itemList.appendChild(li);
+      });
+    }
+
+    function addPlayer() {
+      const nick = document.getElementById('nick').value.trim();
+      const classe = document.getElementById('classe').value.trim();
+      const cp = parseInt(document.getElementById('cp').value);
+      const lvl = parseInt(document.getElementById('lvl').value);
+      if (nick && classe && cp && lvl) {
+        data.players.push({nick, classe, cp, lvl});
+        updateLists();
+      }
+    }
+
+    function addItem() {
+      const nome = document.getElementById('item-name').value.trim();
+      const cp_min = parseInt(document.getElementById('item-cp').value);
+      const lvl_min = parseInt(document.getElementById('item-lvl').value);
+      if (nome && cp_min && lvl_min) {
+        data.items.push({nome, cp_min, lvl_min});
+        updateLists();
+      }
+    }
+
+    function downloadJSON() {
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "data.json";
+      a.click();
+    }
+  </script>
+</body>
+</html>
